@@ -5,10 +5,781 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ShopDeal India - Best Products on Amazon | Save Up to 50%</title>
     <meta name="description" content="Find best products on Amazon India. iPhone, Samsung, OnePlus, Laptops, Headphones, Fashion, Home & more. One click to buy. Save money with ShopDeal India.">
-    <meta name="keywords" content="Amazon deals, best products India, online shopping, iPhone deals, laptop deals, fashion sale">
+    <meta name="keywords" content="Amazon deals, best products India, online shopping, iPhone deals, laptop deals, fashion sale, Amazon affiliate, shop online India">
     <meta name="author" content="ShopDeal India">
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://shopdealindia.vercel.app">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+    
+    <style>
+        /* ========== COMPLETE CSS ========== */
+        :root {
+            --amazon-orange: #ff9900;
+            --amazon-dark: #232f3e;
+            --amazon-light: #febd69;
+            --success: #28a745;
+            --danger: #dc3545;
+            --primary: #ff9900;
+            --secondary: #146eb4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--amazon-dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            color: var(--amazon-orange);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--amazon-orange);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--amazon-dark);
+            padding: 12px 16px;
+            display: block;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-icon, .cart-icon {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .cart-icon span {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--amazon-orange);
+            color: var(--amazon-dark);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .contact-btn {
+            background: var(--amazon-orange);
+            color: var(--amazon-dark) !important;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #232f3e 0%, #146eb4 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .amazon-orange {
+            color: var(--amazon-orange);
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            padding: 16px 32px;
+            background: var(--amazon-orange);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .trending-searches {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .trending-searches a {
+            color: var(--amazon-light);
+            text-decoration: none;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            display: block;
+        }
+
+        /* Flash Sale */
+        .flash-sale {
+            background: linear-gradient(135deg, #ff6b35, #ff4757);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            position: sticky;
+            top: 60px;
+            z-index: 99;
+        }
+
+        .flash-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .flash-icon {
+            font-size: 20px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .flash-timer {
+            background: rgba(0,0,0,0.3);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Categories Navigation */
+        .categories-nav {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cat-nav-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .cat-nav-btn:hover,
+        .cat-nav-btn.active {
+            background: var(--amazon-orange);
+            color: white;
+            border-color: var(--amazon-orange);
+        }
+
+        /* Products Section */
+        .products-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            position: relative;
+        }
+
+        .sort-options select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+        }
+
+        .badge-hot {
+            background: linear-gradient(135deg, #ff4757, #ff6b35);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .badge-prime {
+            background: #00a8e1;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .product-image {
+            height: 220px;
+            background: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .product-info {
+            padding: 15px;
+            position: relative;
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .product-price {
+            margin-bottom: 8px;
+        }
+
+        .current-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #146eb4;
+        }
+
+        .mrp {
+            font-size: 13px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+
+        .discount {
+            background: #e6f7e6;
+            color: var(--success);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .product-rating {
+            color: #ffc107;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .product-rating span {
+            color: #666;
+            margin-left: 5px;
+        }
+
+        .reviews {
+            color: #666;
+            font-size: 11px;
+        }
+
+        .product-features {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .feature-tag {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--amazon-orange);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .buy-btn:hover {
+            background: var(--amazon-light);
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .load-more {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .load-more-btn {
+            padding: 12px 30px;
+            background: var(--amazon-orange);
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 60px;
+            font-size: 18px;
+            color: white;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 20px;
+            font-size: 18px;
+        }
+
+        /* Features */
+        .features {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            background: white;
+            border-radius: 20px;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature span {
+            font-size: 40px;
+        }
+
+        .feature h3 {
+            margin: 15px 0 10px;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            border-radius: 20px;
+        }
+
+        .newsletter h3 {
+            margin-bottom: 10px;
+        }
+
+        .newsletter form {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .newsletter input {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .newsletter button {
+            padding: 12px 25px;
+            background: var(--amazon-orange);
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* FAQ */
+        .faq-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .faq-question {
+            padding: 18px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            background: #fafafa;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 300px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--amazon-dark);
+            color: white;
+            padding: 50px 20px 30px;
+            margin-top: 60px;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 15px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #aaa;
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .footer-col a:hover {
+            color: var(--amazon-orange);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #444;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-float img {
+            width: 35px;
+            height: 35px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                padding: 20px 0;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .dropdown-content {
+                position: static;
+                background: #333;
+            }
+            
+            .dropdown-content a {
+                color: white;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+                border-radius: 20px;
+            }
+            
+            .stats-bar {
+                gap: 20px;
+            }
+            
+            .stat-number {
+                font-size: 22px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .product-image {
+                height: 160px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .flash-sale {
+                top: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+            
+            .newsletter form {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -49,10 +820,8 @@
             <p>Save up to 50% + Extra 10% Cashback | One Click to Buy</p>
             
             <div class="search-bar" id="search">
-                <input type="text" id="searchInput" placeholder="Search: iPhone 15, laptop, shoes, headphones..." onkeypress="if(event.key==='Enter') aiSearchProducts()">
-                <button onclick="aiSearchProducts()">
-                    <span>🔍</span> AI Search →
-                </button>
+                <input type="text" id="searchInput" placeholder="Search: iPhone 15, laptop, shoes, headphones..." onkeypress="if(event.key==='Enter') searchProducts()">
+                <button onclick="searchProducts()">🔍 Search →</button>
             </div>
             
             <div class="trending-searches">
@@ -172,7 +941,7 @@
         
         <div class="faq-item">
             <div class="faq-question">How do I get WhatsApp deal alerts? <span>▼</span></div>
-            <div class="faq-answer">Click the WhatsApp icon on any product and enter your number. We'll send you best deals and reminders if you forget to complete purchase.</div>
+            <div class="faq-answer">Click the WhatsApp button on bottom right and enter your number. We'll send you best deals and reminders.</div>
         </div>
         
         <div class="faq-item">
@@ -215,7 +984,6 @@
                 <a href="#" onclick="showDeals()">Today's Deals</a>
                 <a href="#" onclick="showNewArrivals()">New Arrivals</a>
                 <a href="#" onclick="showGiftCards()">Gift Cards</a>
-                <a href="#" onclick="showCustomerService()">Customer Service</a>
             </div>
             <div class="footer-col">
                 <h4>Contact Us</h4>
@@ -226,7 +994,7 @@
         </div>
         <div class="copyright">
             <p>© 2024 ShopDeal India | As an Amazon Associate, we earn from qualifying purchases</p>
-            <p><a href="/privacy.html">Privacy Policy</a> | <a href="/terms.html">Terms of Service</a> | <a href="/disclosure.html">Affiliate Disclosure</a></p>
+            <p><a href="#" style="color: #aaa;">Privacy Policy</a> | <a href="#" style="color: #aaa;">Terms of Service</a> | <a href="#" style="color: #aaa;">Affiliate Disclosure</a></p>
         </div>
     </footer>
 
@@ -235,20 +1003,178 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     </div>
 
-    <script src="js/amazon-products.js"></script>
-    <script src="js/whatsapp-tracker.js"></script>
-    <script src="js/groq-ai.js"></script>
-    <script src="js/pixel-tracker.js"></script>
-    
     <script>
+        // ========== COMPLETE JAVASCRIPT ==========
+        
+        // Configuration
+        const AMAZON_AFFILIATE_ID = 'smileai24-21';
+        const AMAZON_BASE_URL = 'https://www.amazon.in';
+        
+        // Products Database
+        const productsDatabase = {
+            'iphone-15': {
+                asin: 'B0CHWNPS5R',
+                name: 'Apple iPhone 15 (128GB) - Black',
+                price: '71999',
+                mrp: '79900',
+                discount: '10%',
+                category: 'mobiles',
+                brand: 'Apple',
+                rating: 4.7,
+                reviews: '12450',
+                image: 'https://m.media-amazon.com/images/I/81K9kO9sL9L._SL1500_.jpg',
+                features: ['A16 Bionic Chip', '48MP Camera', 'USB-C', 'All-Day Battery'],
+                prime: true
+            },
+            'samsung-s24': {
+                asin: 'B0CNL6TG8K',
+                name: 'Samsung Galaxy S24 5G (8GB, 256GB)',
+                price: '79999',
+                mrp: '89999',
+                discount: '11%',
+                category: 'mobiles',
+                brand: 'Samsung',
+                rating: 4.6,
+                reviews: '8450',
+                image: 'https://m.media-amazon.com/images/I/61Iym7aPr9L._SL1500_.jpg',
+                features: ['AI Phone', '50MP Camera', '120Hz Display'],
+                prime: true
+            },
+            'oneplus-12': {
+                asin: 'B0CQHGRL9Q',
+                name: 'OnePlus 12 5G (16GB, 512GB)',
+                price: '64999',
+                mrp: '69999',
+                discount: '7%',
+                category: 'mobiles',
+                brand: 'OnePlus',
+                rating: 4.5,
+                reviews: '5620',
+                image: 'https://m.media-amazon.com/images/I/61eB7J1lJ4L._SL1500_.jpg',
+                features: ['Snapdragon 8 Gen 3', '50MP Camera', '100W Charging'],
+                prime: true
+            },
+            'macbook-air-m2': {
+                asin: 'B0B3C2R8K5',
+                name: 'Apple MacBook Air M2 (8GB, 256GB)',
+                price: '89990',
+                mrp: '99900',
+                discount: '10%',
+                category: 'laptops',
+                brand: 'Apple',
+                rating: 4.8,
+                reviews: '23450',
+                image: 'https://m.media-amazon.com/images/I/71TPda7cwUL._SL1500_.jpg',
+                features: ['M2 Chip', '13.6" Liquid Retina', '18hrs Battery'],
+                prime: true
+            },
+            'hp-victus': {
+                asin: 'B0BZ5KX3H8',
+                name: 'HP Victus Gaming Laptop (16GB, 512GB SSD)',
+                price: '56990',
+                mrp: '67990',
+                discount: '16%',
+                category: 'laptops',
+                brand: 'HP',
+                rating: 4.4,
+                reviews: '8750',
+                image: 'https://m.media-amazon.com/images/I/61xUqZyC-uL._SL1500_.jpg',
+                features: ['Intel i5', 'RTX 3050', '144Hz Display'],
+                prime: true
+            },
+            'airpods-pro-2': {
+                asin: 'B0BDJ3Q9R2',
+                name: 'Apple AirPods Pro (2nd Gen) with MagSafe',
+                price: '24999',
+                mrp: '29900',
+                discount: '16%',
+                category: 'headphones',
+                brand: 'Apple',
+                rating: 4.7,
+                reviews: '45670',
+                image: 'https://m.media-amazon.com/images/I/71xb2xkN5qL._SL1500_.jpg',
+                features: ['Active Noise Cancellation', 'Adaptive Audio', '6hrs Battery'],
+                prime: true
+            },
+            'sony-1000xm5': {
+                asin: 'B0B3J2X8F4',
+                name: 'Sony WH-1000XM5 Noise Cancelling Headphones',
+                price: '29990',
+                mrp: '34990',
+                discount: '14%',
+                category: 'headphones',
+                brand: 'Sony',
+                rating: 4.8,
+                reviews: '23420',
+                image: 'https://m.media-amazon.com/images/I/61qQ8xWQ6jL._SL1500_.jpg',
+                features: ['Industry Leading ANC', '30hrs Battery', 'Speak-to-Chat'],
+                prime: true
+            },
+            'nike-air-max': {
+                asin: 'B08H2J3K4L5',
+                name: 'Nike Air Max Running Shoes',
+                price: '5999',
+                mrp: '8995',
+                discount: '33%',
+                category: 'fashion',
+                brand: 'Nike',
+                rating: 4.5,
+                reviews: '12540',
+                image: 'https://m.media-amazon.com/images/I/71JqQxXqJQL._SL1500_.jpg',
+                features: ['Air Max Cushioning', 'Breathable Mesh'],
+                prime: true
+            },
+            'levis-501': {
+                asin: 'B08D1E2F3G4',
+                name: "Levi's 501 Original Jeans",
+                price: '2299',
+                mrp: '3999',
+                discount: '42%',
+                category: 'fashion',
+                brand: "Levi's",
+                rating: 4.4,
+                reviews: '8760',
+                image: 'https://m.media-amazon.com/images/I/81HqQxXqJQL._SL1500_.jpg',
+                features: ['100% Cotton', 'Button Fly', 'Classic Fit'],
+                prime: true
+            },
+            'prestige-cooker': {
+                asin: 'B08C3D4E5F6',
+                name: 'Prestige Deluxe Alpha Pressure Cooker (5L)',
+                price: '2299',
+                mrp: '3450',
+                discount: '33%',
+                category: 'home',
+                brand: 'Prestige',
+                rating: 4.6,
+                reviews: '34520',
+                image: 'https://m.media-amazon.com/images/I/71KqQxXqJQL._SL1500_.jpg',
+                features: ['Stainless Steel', '5L Capacity', 'Induction Compatible'],
+                prime: true
+            },
+            'mamaearth-facewash': {
+                asin: 'B07X8Y9Z0A1',
+                name: 'Mamaearth Vitamin C Face Wash',
+                price: '299',
+                mrp: '599',
+                discount: '50%',
+                category: 'beauty',
+                brand: 'Mamaearth',
+                rating: 4.4,
+                reviews: '87650',
+                image: 'https://m.media-amazon.com/images/I/61FqQxXqJQL._SL1500_.jpg',
+                features: ['Vitamin C', 'Turmeric', 'Toxin Free'],
+                prime: true
+            }
+        };
+        
         // Global variables
         let allProducts = [];
         let currentProducts = [];
         let currentPage = 1;
         const productsPerPage = 12;
-        let currentCategory = 'all';
         
-        // Build all products array
+        // Build products array
         function buildProductsArray() {
             allProducts = [];
             for (const [key, product] of Object.entries(productsDatabase)) {
@@ -256,6 +1182,57 @@
             }
             currentProducts = [...allProducts];
             renderProducts();
+        }
+        
+        // Get Amazon link
+        function getAmazonLink(productKey) {
+            const product = productsDatabase[productKey];
+            if (!product) return '#';
+            return `${AMAZON_BASE_URL}/dp/${product.asin}?tag=${AMAZON_AFFILIATE_ID}`;
+        }
+        
+        // Go to product
+        function goToProduct(productKey) {
+            const product = productsDatabase[productKey];
+            if (!product) {
+                alert('Product not found!');
+                return;
+            }
+            const amazonLink = getAmazonLink(productKey);
+            trackClick(productKey, product.name, product.price);
+            window.open(amazonLink, '_blank');
+            
+            // Store for WhatsApp reminder
+            sessionStorage.setItem('last_product', JSON.stringify({
+                key: productKey,
+                name: product.name,
+                price: product.price,
+                time: new Date().toISOString()
+            }));
+            
+            setTimeout(() => {
+                const reminder = sessionStorage.getItem('last_product');
+                if (reminder) {
+                    showReminder(product);
+                }
+            }, 30000);
+        }
+        
+        function showReminder(product) {
+            const phone = prompt(`You didn't complete purchase of ${product.name}! Enter WhatsApp number for special discount:`, '91');
+            if (phone && phone.length >= 10) {
+                const msg = `🛍️ *Special Discount!*\n\nProduct: ${product.name}\nPrice: ₹${parseInt(product.price).toLocaleString()}\n\n👉 Buy now: ${getAmazonLink(product.key)}\n\n🎁 Use code SAVE10 for extra 10% off!`;
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                sessionStorage.removeItem('last_product');
+            }
+        }
+        
+        // Track clicks
+        function trackClick(productKey, productName, price) {
+            let clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
+            clicks.push({ product_key: productKey, product_name: productName, price: price, time: new Date().toISOString() });
+            localStorage.setItem('amazon_clicks', JSON.stringify(clicks.slice(-500)));
+            updateCartCount();
         }
         
         // Render products
@@ -274,7 +1251,10 @@
             
             container.innerHTML = productsToShow.map(product => `
                 <div class="product-card" onclick="goToProduct('${product.key}')">
-                    <div class="product-badge">${getBadge(product)}</div>
+                    <div class="product-badge">
+                        ${product.discount && parseInt(product.discount) > 15 ? '<span class="badge-hot">🔥 HOT DEAL</span>' : ''}
+                        ${product.prime ? '<span class="badge-prime">PRIME</span>' : ''}
+                    </div>
                     <div class="product-image">
                         <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='https://m.media-amazon.com/images/I/61default.jpg'">
                     </div>
@@ -293,195 +1273,83 @@
                         <div class="product-features">
                             ${product.features.slice(0,2).map(f => `<span class="feature-tag">✓ ${f}</span>`).join('')}
                         </div>
-                        <button class="buy-btn" onclick="event.stopPropagation(); goToProduct('${product.key}')">
-                            Buy on Amazon →
-                        </button>
-                        <button class="wishlist-btn" onclick="event.stopPropagation(); addToWishlist('${product.key}')">❤️</button>
+                        <button class="buy-btn" onclick="event.stopPropagation(); goToProduct('${product.key}')">Buy on Amazon →</button>
                     </div>
                 </div>
             `).join('');
             
-            // Update load more button
             const loadMoreBtn = document.querySelector('.load-more');
             if (loadMoreBtn) {
-                if (currentProducts.length <= currentPage * productsPerPage) {
-                    loadMoreBtn.style.display = 'none';
-                } else {
-                    loadMoreBtn.style.display = 'block';
-                }
-            }
-            
-            // Track product views
-            if (productsToShow.length > 0 && typeof trackProductView === 'function') {
-                trackProductView(productsToShow[0]);
+                loadMoreBtn.style.display = currentProducts.length <= currentPage * productsPerPage ? 'none' : 'block';
             }
         }
         
-        // Get product badge
-        function getBadge(product) {
-            if (product.discount && parseInt(product.discount) > 20) {
-                return `<span class="badge-hot">🔥 HOT DEAL</span>`;
-            }
-            if (product.prime) {
-                return `<span class="badge-prime">PRIME</span>`;
-            }
-            return '';
-        }
+        function loadMoreProducts() { currentPage++; renderProducts(); }
         
-        // Load more products
-        function loadMoreProducts() {
-            currentPage++;
-            renderProducts();
-        }
-        
-        // Filter by category
         function filterByCategory(category) {
-            currentCategory = category;
             currentPage = 1;
-            
             if (category === 'all') {
                 currentProducts = [...allProducts];
             } else {
                 currentProducts = allProducts.filter(p => p.category === category);
             }
-            
             renderProducts();
-            
-            // Update active button
-            document.querySelectorAll('.cat-nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent.includes(category) || (category === 'all' && btn.textContent === 'All Products')) {
-                    btn.classList.add('active');
-                }
-            });
-            
+            document.querySelectorAll('.cat-nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
             document.getElementById('sectionTitle').innerText = getCategoryTitle(category);
         }
         
         function getCategoryTitle(category) {
             const titles = {
-                'mobiles': '📱 Best Mobiles for You',
-                'laptops': '💻 Top Laptops on Sale',
-                'headphones': '🎧 Premium Headphones',
-                'fashion': '👕 Latest Fashion Trends',
-                'home': '🏠 Home & Kitchen Essentials',
-                'beauty': '💄 Beauty & Personal Care',
+                'mobiles': '📱 Best Mobiles for You', 'laptops': '💻 Top Laptops on Sale',
+                'headphones': '🎧 Premium Headphones', 'fashion': '👕 Latest Fashion Trends',
+                'home': '🏠 Home & Kitchen Essentials', 'beauty': '💄 Beauty & Personal Care',
                 'all': '🔥 Recommended for You'
             };
             return titles[category] || '🔥 Recommended for You';
         }
         
-        // Show all products
-        function showAllProducts() {
-            filterByCategory('all');
-        }
+        function showAllProducts() { filterByCategory('all'); }
+        function showBestSellers() { currentProducts = [...allProducts].sort((a,b) => b.rating - a.rating).slice(0,20); currentPage = 1; renderProducts(); document.getElementById('sectionTitle').innerText = '🏆 Best Sellers on Amazon'; }
+        function showDeals() { currentProducts = allProducts.filter(p => p.discount && parseInt(p.discount) > 15); currentPage = 1; renderProducts(); document.getElementById('sectionTitle').innerText = '🔥 Today\'s Hottest Deals'; }
+        function showNewArrivals() { currentProducts = [...allProducts].slice(0,20); currentPage = 1; renderProducts(); document.getElementById('sectionTitle').innerText = '✨ New Arrivals'; }
         
-        // Show best sellers
-        function showBestSellers() {
-            currentProducts = [...allProducts].sort((a,b) => b.rating - a.rating).slice(0,20);
-            currentPage = 1;
-            renderProducts();
-            document.getElementById('sectionTitle').innerText = '🏆 Best Sellers on Amazon';
-        }
-        
-        // Show deals
-        function showDeals() {
-            currentProducts = allProducts.filter(p => p.discount && parseInt(p.discount) > 15);
-            currentPage = 1;
-            renderProducts();
-            document.getElementById('sectionTitle').innerText = '🔥 Today\'s Hottest Deals';
-        }
-        
-        // Show new arrivals
-        function showNewArrivals() {
-            currentProducts = [...allProducts].slice(0,20);
-            currentPage = 1;
-            renderProducts();
-            document.getElementById('sectionTitle').innerText = '✨ New Arrivals';
-        }
-        
-        // Sort products
         function sortProducts(sortBy) {
             let sorted = [...currentProducts];
-            switch(sortBy) {
-                case 'price_low':
-                    sorted.sort((a,b) => parseInt(a.price) - parseInt(b.price));
-                    break;
-                case 'price_high':
-                    sorted.sort((a,b) => parseInt(b.price) - parseInt(a.price));
-                    break;
-                case 'rating':
-                    sorted.sort((a,b) => b.rating - a.rating);
-                    break;
-                case 'discount':
-                    sorted.sort((a,b) => (parseInt(b.discount) || 0) - (parseInt(a.discount) || 0));
-                    break;
-                default:
-                    sorted = [...currentProducts];
-            }
+            if (sortBy === 'price_low') sorted.sort((a,b) => parseInt(a.price) - parseInt(b.price));
+            else if (sortBy === 'price_high') sorted.sort((a,b) => parseInt(b.price) - parseInt(a.price));
+            else if (sortBy === 'rating') sorted.sort((a,b) => b.rating - a.rating);
+            else if (sortBy === 'discount') sorted.sort((a,b) => (parseInt(b.discount) || 0) - (parseInt(a.discount) || 0));
             currentProducts = sorted;
             currentPage = 1;
             renderProducts();
         }
         
-        // AI Search
-        async function aiSearchProducts() {
-            const query = document.getElementById('searchInput').value;
-            if (!query) {
-                alert('Please enter what you want to buy!');
-                return;
-            }
-            
-            document.getElementById('productsGrid').innerHTML = '<div class="loading-spinner">🤖 AI is finding best products for you...</div>';
-            
-            const results = await aiSearch(query);
-            
-            if (results.length > 0) {
-                currentProducts = results;
-                currentPage = 1;
-                renderProducts();
-                document.getElementById('sectionTitle').innerHTML = `🔍 Search Results for "${query}"`;
-                trackSearch(query, results);
-            } else {
-                document.getElementById('productsGrid').innerHTML = '<div class="no-products">No products found. Try different search!</div>';
-            }
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (!query) { alert('Please enter what you want to buy!'); return; }
+            currentProducts = allProducts.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query));
+            currentPage = 1;
+            renderProducts();
+            document.getElementById('sectionTitle').innerHTML = `🔍 Search Results for "${query}"`;
         }
         
-        // Search and buy directly
         function searchAndBuy(query) {
             document.getElementById('searchInput').value = query;
-            aiSearchProducts();
+            searchProducts();
         }
         
-        // Add to wishlist
-        function addToWishlist(productKey) {
-            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-            if (!wishlist.includes(productKey)) {
-                wishlist.push(productKey);
-                localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                alert('❤️ Added to wishlist!');
-            } else {
-                alert('Already in wishlist!');
-            }
-        }
-        
-        // Update cart count
         function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            document.getElementById('cartCount').innerText = cart.length;
+            const clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
+            document.getElementById('cartCount').innerText = clicks.length;
         }
         
-        // Show cart
         function showCart() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
-            } else {
-                alert(`Cart has ${cart.length} items. Click WhatsApp button to complete purchase!`);
-            }
+            const clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
+            if (clicks.length === 0) alert('Your cart is empty!');
+            else alert(`You have ${clicks.length} items in cart. Click WhatsApp button to complete purchase!`);
         }
         
-        // Subscribe to newsletter
         function subscribeNewsletter(event) {
             event.preventDefault();
             const email = document.getElementById('newsletterEmail').value;
@@ -492,99 +1360,69 @@
                     localStorage.setItem('subscribers', JSON.stringify(subscribers));
                     alert('✅ Subscribed successfully! You will receive daily deals.');
                     document.getElementById('newsletterEmail').value = '';
-                } else {
-                    alert('Already subscribed!');
-                }
+                } else alert('Already subscribed!');
             }
         }
         
-        // Share functions
-        function shareOnWhatsApp() {
-            const text = encodeURIComponent("Check out ShopDeal India - Best products on Amazon! Save up to 50%: https://yourdomain.com");
-            window.open(`https://wa.me/?text=${text}`, '_blank');
-        }
-        
-        function shareOnFacebook() {
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
-        }
-        
-        function shareOnTwitter() {
-            window.open(`https://twitter.com/intent/tweet?text=Best%20deals%20on%20Amazon!&url=${encodeURIComponent(window.location.href)}`, '_blank');
-        }
-        
-        function shareOnInstagram() {
-            alert('📱 Follow us on Instagram @shopdealindia for daily deals!');
-        }
-        
-        function startWhatsAppChat() {
-            const message = encodeURIComponent("Hi! I want to buy products from ShopDeal India. Can you help me find best deals?");
-            window.open(`https://wa.me/919773747761?text=${message}`, '_blank');
-        }
-        
-        function openSearchModal() {
-            document.getElementById('searchInput').focus();
-            document.getElementById('search').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function toggleMobileMenu() {
-            document.getElementById('navLinks').classList.toggle('show');
-        }
+        function shareOnWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent('Check out ShopDeal India - Best products on Amazon! Save up to 50%: ' + window.location.href)}`, '_blank'); }
+        function shareOnFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank'); }
+        function shareOnTwitter() { window.open(`https://twitter.com/intent/tweet?text=Best%20deals%20on%20Amazon!&url=${encodeURIComponent(window.location.href)}`, '_blank'); }
+        function shareOnInstagram() { alert('📱 Follow us on Instagram @shopdealindia for daily deals!'); }
+        function startWhatsAppChat() { window.open(`https://wa.me/919773747761?text=${encodeURIComponent('Hi! I want to buy products from ShopDeal India. Can you help me find best deals?')}`, '_blank'); }
+        function openSearchModal() { document.getElementById('searchInput').focus(); document.getElementById('search').scrollIntoView({ behavior: 'smooth' }); }
+        function toggleMobileMenu() { document.getElementById('navLinks').classList.toggle('show'); }
         
         // Flash sale timer
         function startFlashSaleTimer() {
             const endTime = new Date();
             endTime.setHours(endTime.getHours() + 24);
-            
             function updateTimer() {
                 const now = new Date();
                 const diff = endTime - now;
-                
-                if (diff <= 0) {
-                    document.getElementById('flashTimer').innerText = '00:00:00';
-                    return;
-                }
-                
+                if (diff <= 0) { document.getElementById('flashTimer').innerText = '00:00:00'; return; }
                 const hours = Math.floor(diff / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                
                 document.getElementById('flashTimer').innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
-            
             updateTimer();
             setInterval(updateTimer, 1000);
         }
+        
+        // Pan India SEO - Dynamic City Targeting
+        (function() {
+            const cities = ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Bhopal', 'Patna', 'Surat', 'Chandigarh'];
+            const products = ['iPhone', 'Samsung', 'Laptop', 'Headphones', 'Shoes', 'Watch', 'TV', 'Speaker'];
+            const randomCity = cities[Math.floor(Math.random() * cities.length)];
+            const randomProduct = products[Math.floor(Math.random() * products.length)];
+            document.title = `Best ${randomProduct} Deals in ${randomCity} - Shop on Amazon India`;
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.setAttribute('content', `Find best ${randomProduct} deals on Amazon in ${randomCity}. Save up to 50% with free shipping. Shop now!`);
+            console.log(`📍 Pan India SEO Active - Targeting: ${randomCity}`);
+        })();
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             buildProductsArray();
             updateCartCount();
             startFlashSaleTimer();
-            
-            // FAQ toggle
             document.querySelectorAll('.faq-question').forEach(q => {
-                q.addEventListener('click', () => {
-                    q.parentElement.classList.toggle('active');
-                });
+                q.addEventListener('click', () => { q.parentElement.classList.toggle('active'); });
             });
-            
-            console.log('🚀 ShopDeal India Ready!');
-            console.log('📊 Call showAnalytics() to see stats');
-            console.log('🤖 AI Search enabled with Groq');
-            console.log('📱 WhatsApp tracking active');
+            console.log('🚀 ShopDeal India Ready! Store ID: smileai24-21');
         });
         
         // Make functions global
+        window.goToProduct = goToProduct;
         window.filterByCategory = filterByCategory;
         window.showAllProducts = showAllProducts;
         window.showBestSellers = showBestSellers;
         window.showDeals = showDeals;
         window.showNewArrivals = showNewArrivals;
         window.sortProducts = sortProducts;
-        window.aiSearchProducts = aiSearchProducts;
+        window.searchProducts = searchProducts;
         window.searchAndBuy = searchAndBuy;
         window.loadMoreProducts = loadMoreProducts;
-        window.addToWishlist = addToWishlist;
         window.showCart = showCart;
         window.subscribeNewsletter = subscribeNewsletter;
         window.shareOnWhatsApp = shareOnWhatsApp;
