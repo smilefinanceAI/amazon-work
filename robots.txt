@@ -1,3 +1,16 @@
+# SEO - Robots.txt for ShopDeal India
 User-agent: *
 Allow: /
-Sitemap: https://yourdomain.com/sitemap.xml
+Disallow: /api/
+Disallow: /private/
+Sitemap: https://yourdomain.vercel.app/sitemap.xml
+
+# Allow all crawlers to index products
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay to be respectful
+Crawl-delay: 1
