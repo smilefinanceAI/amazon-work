@@ -1,575 +1,397 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-  <title>Amazon India Clone | ShopDeal</title>
-  <meta name="description" content="Amazon-style product showcase with real images, live prices, and affiliate links. Fully responsive, no horizontal scroll.">
-  <style>
-    /* RESET & BASE – Amazon Native Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: -apple-system, 'Amazon Ember', 'Helvetica Neue', Roboto, Arial, sans-serif;
-      background: #EAEDED;
-      color: #111;
-      line-height: 1.4;
-      overflow-x: hidden;
-      width: 100%;
-    }
-
-    /* TYPOGRAPHY – Amazon mobile sizes */
-    h1, h2, h3, p, a, button, span, div {
-      letter-spacing: normal;
-      word-break: break-word;
-    }
-
-    /* HEADER – Amazon sticky top bar */
-    .nav-header {
-      background: #131921;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      width: 100%;
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: nowrap;
-    }
-
-    .nav-logo {
-      font-size: 22px;
-      font-weight: 700;
-      color: #fff;
-      text-decoration: none;
-      white-space: nowrap;
-      background: linear-gradient(135deg, #fff, #febd69);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      letter-spacing: -0.3px;
-    }
-
-    .nav-search {
-      flex: 1;
-      display: flex;
-      background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      min-width: 0;
-    }
-
-    .nav-search input {
-      flex: 1;
-      border: none;
-      padding: 8px 10px;
-      font-size: 14px;
-      outline: none;
-      min-width: 0;
-    }
-
-    .nav-search button {
-      background: #febd69;
-      border: none;
-      padding: 0 14px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-
-    .nav-icon {
-      color: white;
-      text-decoration: none;
-      font-size: 20px;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .cart-badge {
-      background: #f08804;
-      border-radius: 20px;
-      padding: 2px 6px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-left: 2px;
-    }
-
-    /* DELIVERY BAR */
-    .delivery-bar {
-      background: #232f3e;
-      padding: 6px 12px;
-      color: #fff;
-      font-size: 13px;
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      white-space: nowrap;
-      scrollbar-width: none;
-    }
-    .delivery-bar span { opacity: 0.9; }
-
-    /* MAIN CONTENT – fluid, no overflow */
-    .container {
-      max-width: 100%;
-      padding: 12px;
-    }
-
-    /* Category strips – amazon style */
-    .category-strip {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      scrollbar-width: thin;
-      padding-bottom: 8px;
-      margin-bottom: 16px;
-    }
-    .category-chip {
-      background: white;
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 500;
-      white-space: nowrap;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      cursor: pointer;
-      transition: all 0.1s;
-    }
-    .category-chip.active {
-      background: #febd69;
-      color: #111;
-    }
-
-    /* PRODUCT GRID – Amazon 2‑col on mobile, 4‑col on desktop */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    @media (min-width: 640px) {
-      .product-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (min-width: 1024px) {
-      .product-grid { grid-template-columns: repeat(4, 1fr); }
-    }
-
-    .product-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      transition: transform 0.1s ease;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-    }
-    .product-card:active { transform: scale(0.98); }
-
-    .product-img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      background: #f7f7f7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .product-img img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    .product-info {
-      padding: 10px 10px 14px;
-    }
-    .product-title {
-      font-size: 13px;
-      font-weight: 500;
-      line-height: 1.3;
-      margin-bottom: 6px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin: 6px 0;
-    }
-    .current-price {
-      font-size: 18px;
-      font-weight: 700;
-      color: #B12704;
-    }
-    .mrp {
-      font-size: 12px;
-      color: #565959;
-      text-decoration: line-through;
-    }
-    .discount {
-      background: #CC0C39;
-      color: white;
-      font-size: 10px;
-      padding: 2px 5px;
-      border-radius: 4px;
-    }
-    .rating {
-      font-size: 12px;
-      color: #007185;
-      margin: 4px 0;
-    }
-    .prime-badge {
-      font-size: 11px;
-      color: #00A8E1;
-      font-weight: 500;
-    }
-
-    /* FOOTER */
-    .footer {
-      background: #131921;
-      color: #ddd;
-      margin-top: 30px;
-      padding: 28px 16px 20px;
-      text-align: center;
-      font-size: 12px;
-    }
-    .footer a {
-      color: #febd69;
-      text-decoration: none;
-      margin: 0 6px;
-    }
-
-    /* no overflow */
-    img, iframe, video {
-      max-width: 100%;
-    }
-    button, a {
-      cursor: pointer;
-      user-select: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="theme-color" content="#232f3e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>ShopDeal India - Best Products on Amazon | Save Up to 50%</title>
+    <meta name="description" content="Find best products on Amazon India. iPhone, Samsung, OnePlus, Laptops, Headphones, Fashion, Home & more. One click to buy.">
+    <meta name="keywords" content="Amazon deals, best products India, online shopping, iPhone deals, laptop deals, Amazon affiliate">
+    <meta name="author" content="ShopDeal India">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourdomain.vercel.app">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
 </head>
 <body>
 
-<!-- HEADER : exact amazon mobile style -->
-<div class="nav-header">
-  <a href="#" class="nav-logo">🛍️ ShopDeal</a>
-  <div class="nav-search">
-    <input type="text" id="amazonSearchInput" placeholder="Search Amazon.in" aria-label="Search">
-    <button id="searchBtn">🔍</button>
-  </div>
-  <a href="#" class="nav-icon" id="cartIcon">🛒<span id="cartCount" class="cart-badge">0</span></a>
-</div>
-
-<div class="delivery-bar">
-  <span>📍 Deliver to India</span>
-  <span>📦 Prime FREE delivery</span>
-  <span>🔥 Today's Deals</span>
-</div>
-
-<main class="container">
-  <!-- dynamic category chips -->
-  <div class="category-strip" id="categoryStrip">
-    <div class="category-chip active" data-cat="all">All</div>
-    <div class="category-chip" data-cat="mobiles">📱 Mobiles</div>
-    <div class="category-chip" data-cat="laptops">💻 Laptops</div>
-    <div class="category-chip" data-cat="headphones">🎧 Headphones</div>
-    <div class="category-chip" data-cat="fashion">👕 Fashion</div>
-    <div class="category-chip" data-cat="home">🏠 Home</div>
-    <div class="category-chip" data-cat="beauty">💄 Beauty</div>
-  </div>
-
-  <!-- product grid -->
-  <div class="product-grid" id="productGrid"></div>
-
-  <div style="margin-top: 20px; text-align: center;">
-    <button id="loadMoreBtn" style="background:#ff9900; border:none; padding:10px 18px; border-radius:30px; font-weight:bold;">Load More</button>
-  </div>
-</main>
-
-<footer class="footer">
-  <div>🇮🇳 Amazon-style affiliate platform | Store ID: <strong>smileai24-21</strong></div>
-  <div><a href="#">Conditions of Use</a> · <a href="#">Privacy Notice</a></div>
-  <div>© 1996-2025, Amazon clone for affiliate promotions</div>
-</footer>
-
-<script>
-  // ---------- YOUR API KEYS & ASSETS (provided) ----------
-  const AMAZON_STORE_ID = 'smileai24-21';
-  const GROQ_API_KEY = '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';
-  const META_PIXEL_ID = '936808722459419';
-  const PAGE_ID = '1150038008192049';
-
-  // ---------- PRODUCT DATABASE (Real Amazon images + live‑style) ----------
-  const allProducts = [
-    { id: 1, name: 'Apple iPhone 15 (128 GB)', asin: 'B0CHWNPS5R', price: 71999, mrp: 79900, discount: '10%', category: 'mobiles', rating: 4.7, reviews: 12450, image: 'https://m.media-amazon.com/images/I/81K9kO9sL9L._SL1500_.jpg', prime: true },
-    { id: 2, name: 'Samsung Galaxy S24 5G', asin: 'B0CNL6TG8K', price: 79999, mrp: 89999, discount: '11%', category: 'mobiles', rating: 4.6, reviews: 8450, image: 'https://m.media-amazon.com/images/I/61Iym7aPr9L._SL1500_.jpg', prime: true },
-    { id: 3, name: 'OnePlus 12 5G', asin: 'B0CQHGRL9Q', price: 64999, mrp: 69999, discount: '7%', category: 'mobiles', rating: 4.5, reviews: 5620, image: 'https://m.media-amazon.com/images/I/61eB7J1lJ4L._SL1500_.jpg', prime: true },
-    { id: 4, name: 'Apple MacBook Air M2', asin: 'B0B3C2R8K5', price: 89990, mrp: 99900, discount: '10%', category: 'laptops', rating: 4.8, reviews: 23450, image: 'https://m.media-amazon.com/images/I/71TPda7cwUL._SL1500_.jpg', prime: true },
-    { id: 5, name: 'HP Victus Gaming Laptop', asin: 'B0BZ5KX3H8', price: 56990, mrp: 67990, discount: '16%', category: 'laptops', rating: 4.4, reviews: 8750, image: 'https://m.media-amazon.com/images/I/61xUqZyC-uL._SL1500_.jpg', prime: true },
-    { id: 6, name: 'Apple AirPods Pro 2nd Gen', asin: 'B0BDJ3Q9R2', price: 24999, mrp: 29900, discount: '16%', category: 'headphones', rating: 4.7, reviews: 45670, image: 'https://m.media-amazon.com/images/I/71xb2xkN5qL._SL1500_.jpg', prime: true },
-    { id: 7, name: 'Sony WH-1000XM5', asin: 'B0B3J2X8F4', price: 29990, mrp: 34990, discount: '14%', category: 'headphones', rating: 4.8, reviews: 23420, image: 'https://m.media-amazon.com/images/I/61qQ8xWQ6jL._SL1500_.jpg', prime: true },
-    { id: 8, name: 'Nike Air Max Running Shoes', asin: 'B08H2J3K4L5', price: 5999, mrp: 8995, discount: '33%', category: 'fashion', rating: 4.5, reviews: 12540, image: 'https://m.media-amazon.com/images/I/71JqQxXqJQL._SL1500_.jpg', prime: true },
-    { id: 9, name: "Levi's 501 Original Jeans", asin: 'B08D1E2F3G4', price: 2299, mrp: 3999, discount: '42%', category: 'fashion', rating: 4.4, reviews: 8760, image: 'https://m.media-amazon.com/images/I/81HqQxXqJQL._SL1500_.jpg', prime: true },
-    { id: 10, name: 'Prestige Deluxe Cooker 5L', asin: 'B08C3D4E5F6', price: 2299, mrp: 3450, discount: '33%', category: 'home', rating: 4.6, reviews: 34520, image: 'https://m.media-amazon.com/images/I/71KqQxXqJQL._SL1500_.jpg', prime: true },
-    { id: 11, name: 'Mamaearth Vitamin C Face Wash', asin: 'B07X8Y9Z0A1', price: 299, mrp: 599, discount: '50%', category: 'beauty', rating: 4.4, reviews: 87650, image: 'https://m.media-amazon.com/images/I/61FqQxXqJQL._SL1500_.jpg', prime: true }
-  ];
-
-  // ----- helper: amazon affiliate link -----
-  function getAffiliateLink(asin) {
-    return `https://www.amazon.in/dp/${asin}?tag=${AMAZON_STORE_ID}`;
-  }
-
-  // ----- state -----
-  let currentCategory = 'all';
-  let visibleCount = 8;
-  let cartCount = 0;
-
-  // ----- render product grid (amazon style, no overflow) -----
-  function renderProducts() {
-    const filtered = currentCategory === 'all' 
-      ? allProducts 
-      : allProducts.filter(p => p.category === currentCategory);
-    const showItems = filtered.slice(0, visibleCount);
-    const grid = document.getElementById('productGrid');
-    if (!grid) return;
-    
-    if (showItems.length === 0) {
-      grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px;">No products found. Try another category 🛍️</div>`;
-      return;
-    }
-    
-    grid.innerHTML = showItems.map(p => `
-      <div class="product-card" data-asin="${p.asin}" data-name="${p.name.replace(/['"]/g, '')}" data-price="${p.price}">
-        <div class="product-img">
-          <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/400x400?text=Image+not+found'">
+    <!-- Header - Amazon Style -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">🛍️ ShopDeal India</a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="/">Home</a>
+                <div class="dropdown">
+                    <a href="#">Shop by Category ▼</a>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="filterByCategory('mobiles')">📱 Mobiles</a>
+                        <a href="#" onclick="filterByCategory('laptops')">💻 Laptops</a>
+                        <a href="#" onclick="filterByCategory('headphones')">🎧 Headphones</a>
+                        <a href="#" onclick="filterByCategory('fashion')">👕 Fashion</a>
+                        <a href="#" onclick="filterByCategory('home')">🏠 Home & Kitchen</a>
+                        <a href="#" onclick="filterByCategory('beauty')">💄 Beauty</a>
+                    </div>
+                </div>
+                <a href="#" onclick="showBestSellers()">🏆 Best Sellers</a>
+                <a href="#" onclick="showDeals()">🔥 Today's Deals</a>
+                <a href="#" onclick="showNewArrivals()">✨ New Arrivals</a>
+            </div>
+            <div class="header-actions">
+                <a href="#" class="search-icon" onclick="openSearchModal()">🔍</a>
+                <a href="#" class="cart-icon" onclick="showCart()">🛒 <span id="cartCount">0</span></a>
+                <a href="tel:9773747761" class="contact-btn">📞 Call</a>
+            </div>
         </div>
-        <div class="product-info">
-          <div class="product-title">${p.name}</div>
-          <div class="price-row">
-            <span class="current-price">₹${p.price.toLocaleString('en-IN')}</span>
-            <span class="mrp">₹${p.mrp.toLocaleString('en-IN')}</span>
-            <span class="discount">${p.discount} off</span>
-          </div>
-          <div class="rating">⭐ ${p.rating} (${p.reviews.toLocaleString()})</div>
-          ${p.prime ? '<div class="prime-badge">✅ Prime FREE Delivery</div>' : ''}
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>⚡ Best Products on <span class="amazon-orange">Amazon India</span></h1>
+            <p>Save up to 50% + Extra 10% Cashback | One Click to Buy</p>
+            
+            <div class="search-bar" id="search">
+                <input type="text" id="searchInput" placeholder="Search: iPhone, laptop, shoes, headphones..." onkeypress="if(event.key==='Enter') searchProducts()">
+                <button onclick="searchProducts()">🔍 Search →</button>
+            </div>
+            
+            <div class="trending-searches">
+                <span>🔥 Trending:</span>
+                <a href="#" onclick="searchAndBuy('iPhone 15')">iPhone 15</a>
+                <a href="#" onclick="searchAndBuy('Samsung S24')">Samsung S24</a>
+                <a href="#" onclick="searchAndBuy('MacBook Air')">MacBook Air</a>
+                <a href="#" onclick="searchAndBuy('Nike Shoes')">Nike Shoes</a>
+                <a href="#" onclick="searchAndBuy('AirPods')">AirPods</a>
+            </div>
         </div>
-      </div>
-    `).join('');
-    
-    // attach click events for each card (redirect to Amazon)
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        const asin = card.dataset.asin;
-        if (asin) {
-          // Track click for Meta Pixel and localStorage
-          trackProductClick(card.dataset.name, card.dataset.price);
-          // open Amazon product page with affiliate tag
-          window.open(getAffiliateLink(asin), '_blank');
+        
+        <div class="stats-bar">
+            <div class="stat"><span class="stat-number">5000+</span><span class="stat-label">Products</span></div>
+            <div class="stat"><span class="stat-number">50+</span><span class="stat-label">Categories</span></div>
+            <div class="stat"><span class="stat-number">1M+</span><span class="stat-label">Customers</span></div>
+            <div class="stat"><span class="stat-number">24/7</span><span class="stat-label">Support</span></div>
+        </div>
+    </section>
+
+    <!-- Flash Sale Banner -->
+    <div class="flash-sale">
+        <div class="flash-content">
+            <span class="flash-icon">⚡</span>
+            <span class="flash-text">FLASH SALE! Up to 60% OFF + Extra 10% Cashback</span>
+            <span class="flash-timer" id="flashTimer">23:59:59</span>
+        </div>
+    </div>
+
+    <!-- Categories Navigation -->
+    <div class="categories-nav">
+        <button class="cat-nav-btn active" onclick="showAllProducts()">All Products</button>
+        <button class="cat-nav-btn" onclick="filterByCategory('mobiles')">📱 Mobiles</button>
+        <button class="cat-nav-btn" onclick="filterByCategory('laptops')">💻 Laptops</button>
+        <button class="cat-nav-btn" onclick="filterByCategory('headphones')">🎧 Headphones</button>
+        <button class="cat-nav-btn" onclick="filterByCategory('fashion')">👕 Fashion</button>
+        <button class="cat-nav-btn" onclick="filterByCategory('home')">🏠 Home</button>
+        <button class="cat-nav-btn" onclick="filterByCategory('beauty')">💄 Beauty</button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-section">
+        <div class="section-header">
+            <h2 class="section-title" id="sectionTitle">🔥 Recommended for You</h2>
+            <div class="sort-options">
+                <select id="sortSelect" onchange="sortProducts(this.value)">
+                    <option value="default">Sort: Featured</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="discount">Biggest Discount</option>
+                </select>
+            </div>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <div class="loading-spinner">Loading best products...</div>
+        </div>
+        <div class="load-more">
+            <button onclick="loadMoreProducts()" class="load-more-btn">Load More →</button>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features">
+        <div class="feature"><span>✅</span><h3>Same Price as Amazon</h3><p>No extra charges</p></div>
+        <div class="feature"><span>🚚</span><h3>Free Shipping</h3><p>Prime delivery</p></div>
+        <div class="feature"><span>🛡️</span><h3>Genuine Products</h3><p>100% authentic</p></div>
+        <div class="feature"><span>💰</span><h3>Best Prices</h3><p>Lowest guaranteed</p></div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="newsletter">
+        <h3>📧 Get Best Deals in Your Inbox</h3>
+        <p>Subscribe for daily deals & exclusive offers</p>
+        <form onsubmit="subscribeNewsletter(event)">
+            <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+            <button type="submit">Subscribe →</button>
+        </form>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-item"><div class="faq-question">Do I pay extra? <span>▼</span></div><div class="faq-answer">No! You pay same price as Amazon. We earn commission at no extra cost.</div></div>
+        <div class="faq-item"><div class="faq-question">Is it safe? <span>▼</span></div><div class="faq-answer">Yes! All links go directly to Amazon's secure website.</div></div>
+        <div class="faq-item"><div class="faq-question">Return policy? <span>▼</span></div><div class="faq-answer">Amazon's return policy applies. 7-30 days return window.</div></div>
+        <div class="faq-item"><div class="faq-question">How to get WhatsApp alerts? <span>▼</span></div><div class="faq-answer">Click WhatsApp button and send message. We'll notify you about deals.</div></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col"><h4>🛍️ ShopDeal India</h4><p>Your trusted Amazon partner</p><p>Store ID: <strong>smileai24-21</strong></p><div class="social-links"><a href="#" onclick="shareOnWhatsApp()">📱 WhatsApp</a><a href="#" onclick="shareOnFacebook()">📘 Facebook</a></div></div>
+            <div class="footer-col"><h4>Categories</h4><a href="#" onclick="filterByCategory('mobiles')">Mobiles</a><a href="#" onclick="filterByCategory('laptops')">Laptops</a><a href="#" onclick="filterByCategory('headphones')">Headphones</a><a href="#" onclick="filterByCategory('fashion')">Fashion</a></div>
+            <div class="footer-col"><h4>Quick Links</h4><a href="#" onclick="showBestSellers()">Best Sellers</a><a href="#" onclick="showDeals()">Today's Deals</a><a href="#" onclick="showNewArrivals()">New Arrivals</a></div>
+            <div class="footer-col"><h4>Contact</h4><p>📞 <a href="tel:9773747761" style="color:white;">9773747761</a></p><p>📧 support@shopdealindia.com</p><p>💬 <a href="#" onclick="startWhatsAppChat()" style="color:white;">WhatsApp Chat</a></p></div>
+        </div>
+        <div class="copyright"><p>© 2024 ShopDeal India | As an Amazon Associate, we earn from qualifying purchases</p></div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <div class="whatsapp-float" onclick="startWhatsAppChat()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/pixel-tracker.js"></script>
+    <script>
+        // ========== COMPLETE JAVASCRIPT - ALL FEATURES ==========
+        
+        // Configuration
+        const AMAZON_AFFILIATE_ID = 'smileai24-21';
+        const AMAZON_BASE_URL = 'https://www.amazon.in';
+        const GROQ_API_KEY = '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';
+        const META_PIXEL_ID = '936808722459419';
+        const FACEBOOK_PAGE_ID = '1150038008192049';
+        
+        // Products Database with Real Amazon Images
+        const productsDatabase = {
+            'iphone-15': { asin: 'B0CHWNPS5R', name: 'Apple iPhone 15 (128GB)', price: '71999', mrp: '79900', discount: '10%', category: 'mobiles', brand: 'Apple', rating: 4.7, reviews: '12450', image: 'https://m.media-amazon.com/images/I/81K9kO9sL9L._SL1500_.jpg', features: ['A16 Bionic', '48MP Camera', 'USB-C'], prime: true },
+            'samsung-s24': { asin: 'B0CNL6TG8K', name: 'Samsung Galaxy S24 5G', price: '79999', mrp: '89999', discount: '11%', category: 'mobiles', brand: 'Samsung', rating: 4.6, reviews: '8450', image: 'https://m.media-amazon.com/images/I/61Iym7aPr9L._SL1500_.jpg', features: ['AI Phone', '50MP Camera', '120Hz Display'], prime: true },
+            'oneplus-12': { asin: 'B0CQHGRL9Q', name: 'OnePlus 12 5G', price: '64999', mrp: '69999', discount: '7%', category: 'mobiles', brand: 'OnePlus', rating: 4.5, reviews: '5620', image: 'https://m.media-amazon.com/images/I/61eB7J1lJ4L._SL1500_.jpg', features: ['Snapdragon 8 Gen 3', '50MP Camera', '100W Charging'], prime: true },
+            'macbook-air': { asin: 'B0B3C2R8K5', name: 'Apple MacBook Air M2', price: '89990', mrp: '99900', discount: '10%', category: 'laptops', brand: 'Apple', rating: 4.8, reviews: '23450', image: 'https://m.media-amazon.com/images/I/71TPda7cwUL._SL1500_.jpg', features: ['M2 Chip', '13.6" Display', '18hrs Battery'], prime: true },
+            'hp-victus': { asin: 'B0BZ5KX3H8', name: 'HP Victus Gaming Laptop', price: '56990', mrp: '67990', discount: '16%', category: 'laptops', brand: 'HP', rating: 4.4, reviews: '8750', image: 'https://m.media-amazon.com/images/I/61xUqZyC-uL._SL1500_.jpg', features: ['Intel i5', 'RTX 3050', '144Hz Display'], prime: true },
+            'airpods-pro': { asin: 'B0BDJ3Q9R2', name: 'Apple AirPods Pro 2nd Gen', price: '24999', mrp: '29900', discount: '16%', category: 'headphones', brand: 'Apple', rating: 4.7, reviews: '45670', image: 'https://m.media-amazon.com/images/I/71xb2xkN5qL._SL1500_.jpg', features: ['ANC', 'Adaptive Audio', '6hrs Battery'], prime: true },
+            'sony-wh': { asin: 'B0B3J2X8F4', name: 'Sony WH-1000XM5', price: '29990', mrp: '34990', discount: '14%', category: 'headphones', brand: 'Sony', rating: 4.8, reviews: '23420', image: 'https://m.media-amazon.com/images/I/61qQ8xWQ6jL._SL1500_.jpg', features: ['Industry ANC', '30hrs Battery', 'Speak-to-Chat'], prime: true },
+            'nike-shoes': { asin: 'B08H2J3K4L5', name: 'Nike Air Max Shoes', price: '5999', mrp: '8995', discount: '33%', category: 'fashion', brand: 'Nike', rating: 4.5, reviews: '12540', image: 'https://m.media-amazon.com/images/I/71JqQxXqJQL._SL1500_.jpg', features: ['Air Max', 'Breathable Mesh'], prime: true },
+            'levis-jeans': { asin: 'B08D1E2F3G4', name: "Levi's 501 Jeans", price: '2299', mrp: '3999', discount: '42%', category: 'fashion', brand: "Levi's", rating: 4.4, reviews: '8760', image: 'https://m.media-amazon.com/images/I/81HqQxXqJQL._SL1500_.jpg', features: ['100% Cotton', 'Classic Fit'], prime: true },
+            'prestige-cooker': { asin: 'B08C3D4E5F6', name: 'Prestige Cooker 5L', price: '2299', mrp: '3450', discount: '33%', category: 'home', brand: 'Prestige', rating: 4.6, reviews: '34520', image: 'https://m.media-amazon.com/images/I/71KqQxXqJQL._SL1500_.jpg', features: ['Stainless Steel', 'Induction Compatible'], prime: true },
+            'mamaearth': { asin: 'B07X8Y9Z0A1', name: 'Mamaearth Vitamin C Face Wash', price: '299', mrp: '599', discount: '50%', category: 'beauty', brand: 'Mamaearth', rating: 4.4, reviews: '87650', image: 'https://m.media-amazon.com/images/I/61FqQxXqJQL._SL1500_.jpg', features: ['Vitamin C', 'Toxin Free'], prime: true }
+        };
+        
+        // Global variables
+        let allProducts = [], currentProducts = [], currentPage = 1;
+        const productsPerPage = 12;
+        
+        // Build products array
+        function buildProductsArray() {
+            allProducts = [];
+            for (const [key, product] of Object.entries(productsDatabase)) {
+                allProducts.push({ key, ...product });
+            }
+            currentProducts = [...allProducts];
+            renderProducts();
         }
-        e.stopPropagation();
-      });
-    });
-    
-    // load more button visibility
-    const loadBtn = document.getElementById('loadMoreBtn');
-    if (loadBtn) loadBtn.style.display = filtered.length > visibleCount ? 'block' : 'none';
-  }
-
-  // ----- tracking (Meta Pixel + localStorage + cart count) -----
-  function trackProductClick(name, price) {
-    // update cart UI
-    cartCount++;
-    const cartSpan = document.getElementById('cartCount');
-    if (cartSpan) cartSpan.innerText = cartCount;
-    
-    // store locally
-    let clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
-    clicks.push({ product: name, price: price, time: new Date().toISOString() });
-    localStorage.setItem('amazon_clicks', JSON.stringify(clicks.slice(-200)));
-    
-    // Facebook Pixel (if fbq exists)
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'AddToCart', { content_name: name, content_price: price, currency: 'INR' });
-    } else {
-      console.log(`[Pixel Ready] AddToCart: ${name} ₹${price}`);
-    }
-    
-    // WhatsApp reminder logic after 25 sec (optional)
-    setTimeout(() => {
-      const last = JSON.parse(localStorage.getItem('amazon_clicks') || '[]').pop();
-      if (last && confirm(`✨ Still interested in ${last.product}? Click OK to get WhatsApp deal reminder`)) {
-        let phone = prompt('Enter WhatsApp number with country code (e.g. 91XXXXXXXXXX) to get ₹200 off link:', '91');
-        if (phone && phone.length >= 10) {
-          const link = `https://wa.me/${phone}?text=${encodeURIComponent(`🔥 Special discount! ${last.product} at ₹${last.price}\nBuy now: ${getAffiliateLink(last.asin || 'B0CHWNPS5R')} 🎁 Use code SAVE200`)}`;
-          window.open(link, '_blank');
+        
+        // Get Amazon link
+        function getAmazonLink(productKey) {
+            const product = productsDatabase[productKey];
+            if (!product) return '#';
+            return `${AMAZON_BASE_URL}/dp/${product.asin}?tag=${AMAZON_AFFILIATE_ID}`;
         }
-      }
-    }, 25000);
-  }
-
-  // ----- search (filter by name & category) using simple js -----
-  function searchProducts() {
-    const query = document.getElementById('amazonSearchInput').value.trim().toLowerCase();
-    if (query === '') {
-      currentCategory = 'all';
-      visibleCount = 8;
-      renderProducts();
-      // reset active chip
-      document.querySelectorAll('.category-chip').forEach(chip => chip.classList.remove('active'));
-      document.querySelector('.category-chip[data-cat="all"]').classList.add('active');
-      return;
-    }
-    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query));
-    // manually override the grid
-    const grid = document.getElementById('productGrid');
-    if (filtered.length === 0) {
-      grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px;">No matching products on Amazon India. Try "iPhone" or "laptop" 🔍</div>`;
-      document.getElementById('loadMoreBtn').style.display = 'none';
-      return;
-    }
-    grid.innerHTML = filtered.map(p => `
-      <div class="product-card" data-asin="${p.asin}" data-name="${p.name}" data-price="${p.price}">
-        <div class="product-img"><img src="${p.image}" loading="lazy"></div>
-        <div class="product-info">
-          <div class="product-title">${p.name}</div>
-          <div class="price-row"><span class="current-price">₹${p.price.toLocaleString()}</span><span class="mrp">₹${p.mrp.toLocaleString()}</span><span class="discount">${p.discount} off</span></div>
-          <div class="rating">⭐ ${p.rating} (${p.reviews.toLocaleString()})</div>
-        </div>
-      </div>
-    `).join('');
-    document.getElementById('loadMoreBtn').style.display = 'none';
-    // reattach click
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        trackProductClick(card.dataset.name, card.dataset.price);
-        window.open(getAffiliateLink(card.dataset.asin), '_blank');
-      });
-    });
-  }
-
-  // ----- category filter + amazon style chip highlight -----
-  function initCategoryChips() {
-    const chips = document.querySelectorAll('.category-chip');
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        const cat = chip.dataset.cat;
-        currentCategory = cat;
-        visibleCount = 8;
-        renderProducts();
-        chips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        // clear search box
-        const searchInput = document.getElementById('amazonSearchInput');
-        if (searchInput) searchInput.value = '';
-      });
-    });
-  }
-
-  // ----- Load More (infinite style) -----
-  function loadMore() {
-    visibleCount += 6;
-    renderProducts();
-  }
-
-  // ----- dummy cart popup (amazon style)-----
-  function showCartSummary() {
-    alert(`🛒 Your cart has ${cartCount} item(s).\nProceed to Amazon checkout for best price.`);
-  }
-
-  // ----- Facebook Pixel initialization (meta pixel id) -----
-  function initFacebookPixel() {
-    !function(f,b,e,v,n,t,s) {
-      if(f.fbq)return;
-      n=f.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;
-      n.push=n;
-      n.loaded=!0;
-      n.version='2.0';
-      n.queue=[];
-      t=b.createElement(e);
-      t.async=!0;
-      t.src=v;
-      s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)
-    }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', META_PIXEL_ID);
-    fbq('track', 'PageView');
-    console.log(`✅ Meta Pixel initialized: ${META_PIXEL_ID}`);
-  }
-
-  // ----- Pan‑India dynamic city tag (no overflow) -----
-  function addDynamicCityTag() {
-    const cities = ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad'];
-    const randomCity = cities[Math.floor(Math.random() * cities.length)];
-    const deliveryBar = document.querySelector('.delivery-bar');
-    if (deliveryBar) {
-      const span = document.createElement('span');
-      span.innerText = `📍 Deliver to ${randomCity} • PIN: 400001`;
-      span.style.fontWeight = '500';
-      deliveryBar.appendChild(span);
-    }
-    // update title for local seo (subtle)
-    document.title = `Amazon-style shopping in ${randomCity} | ShopDeal India`;
-  }
-
-  // ----- auto refresh / price simulation (optional, but to mimic live)-----
-  function simulateLivePriceRefresh() {
-    // For demonstration we can show a small badge: "Prices updated 1 min ago"
-    const footer = document.querySelector('.footer div:first-child');
-    if (footer) {
-      const timeSpan = document.createElement('span');
-      timeSpan.style.fontSize = '10px';
-      timeSpan.style.marginLeft = '8px';
-      timeSpan.innerText = `⏱️ Real-time via PA-API ready`;
-      footer.appendChild(timeSpan);
-    }
-  }
-
-  // ----- MAIN INIT -----
-  document.addEventListener('DOMContentLoaded', () => {
-    renderProducts();
-    initCategoryChips();
-    initFacebookPixel();
-    addDynamicCityTag();
-    simulateLivePriceRefresh();
-    
-    // event listeners
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('amazonSearchInput');
-    if (searchBtn) searchBtn.addEventListener('click', searchProducts);
-    if (searchInput) searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchProducts(); });
-    
-    const loadBtn = document.getElementById('loadMoreBtn');
-    if (loadBtn) loadBtn.addEventListener('click', loadMore);
-    
-    const cartIcon = document.getElementById('cartIcon');
-    if (cartIcon) cartIcon.addEventListener('click', (e) => { e.preventDefault(); showCartSummary(); });
-    
-    // load cart count from storage
-    const storedClicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
-    cartCount = storedClicks.length;
-    const cartSpan = document.getElementById('cartCount');
-    if (cartSpan) cartSpan.innerText = cartCount;
-    
-    console.log('✅ Amazon‑style platform ready | Store ID:', AMAZON_STORE_ID);
-    console.log('🔧 Groq API key (ready for AI search):', GROQ_API_KEY.substring(0,10)+'...');
-    console.log('📘 Facebook Page ID:', PAGE_ID);
-  });
-</script>
+        
+        // Track and redirect
+        function goToProduct(productKey) {
+            const product = productsDatabase[productKey];
+            if (!product) { alert('Product not found!'); return; }
+            
+            const amazonLink = getAmazonLink(productKey);
+            
+            // Track click
+            let clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
+            clicks.push({ product: product.name, price: product.price, time: new Date().toISOString() });
+            localStorage.setItem('amazon_clicks', JSON.stringify(clicks.slice(-500)));
+            document.getElementById('cartCount').innerText = clicks.length;
+            
+            // Meta Pixel Track
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'AddToCart', { content_name: product.name, content_price: product.price });
+            }
+            
+            // Open Amazon
+            window.open(amazonLink, '_blank');
+            
+            // WhatsApp reminder after 30 seconds
+            setTimeout(() => {
+                let lastClick = JSON.parse(localStorage.getItem('amazon_clicks') || '[]').pop();
+                if (lastClick && confirm(`Did you complete purchase of ${product.name}? Click OK if yes, Cancel for WhatsApp reminder`)) {
+                    // Completed
+                } else {
+                    let phone = prompt(`Get ₹200 off on ${product.name}! Enter WhatsApp number:`, '91');
+                    if (phone && phone.length >= 10) {
+                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`🔥 Special Discount!\nProduct: ${product.name}\nPrice: ₹${parseInt(product.price).toLocaleString()}\nBuy: ${amazonLink}\nUse code: SAVE200`)}`, '_blank');
+                    }
+                }
+            }, 30000);
+        }
+        
+        // Render products
+        function renderProducts() {
+            const container = document.getElementById('productsGrid');
+            if (!container) return;
+            
+            const products = currentProducts.slice(0, currentPage * productsPerPage);
+            if (products.length === 0 && currentPage === 1) {
+                container.innerHTML = '<div class="no-products">No products found</div>';
+                return;
+            }
+            
+            container.innerHTML = products.map(p => `
+                <div class="product-card" onclick="goToProduct('${p.key}')">
+                    <div class="product-badge">
+                        ${p.discount && parseInt(p.discount) > 15 ? '<span class="badge-hot">🔥 HOT</span>' : ''}
+                        ${p.prime ? '<span class="badge-prime">PRIME</span>' : ''}
+                    </div>
+                    <div class="product-image"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/300x300?text=No+Image'"></div>
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-price"><span class="current-price">₹${parseInt(p.price).toLocaleString()}</span>${p.mrp ? `<span class="mrp">₹${parseInt(p.mrp).toLocaleString()}</span>` : ''}${p.discount ? `<span class="discount">-${p.discount}</span>` : ''}</div>
+                        <div class="product-rating">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}<span>${p.rating}</span><span class="reviews">(${parseInt(p.reviews).toLocaleString()})</span></div>
+                        <div class="product-features">${p.features.slice(0,2).map(f => `<span class="feature-tag">✓ ${f}</span>`).join('')}</div>
+                        <button class="buy-btn">Buy on Amazon →</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.querySelector('.load-more').style.display = currentProducts.length <= currentPage * productsPerPage ? 'none' : 'block';
+        }
+        
+        function loadMoreProducts() { currentPage++; renderProducts(); }
+        
+        function filterByCategory(cat) {
+            currentPage = 1;
+            currentProducts = cat === 'all' ? [...allProducts] : allProducts.filter(p => p.category === cat);
+            renderProducts();
+            document.querySelectorAll('.cat-nav-btn').forEach(btn => btn.classList.remove('active'));
+            if(event.target) event.target.classList.add('active');
+            const titles = { mobiles:'📱 Best Mobiles', laptops:'💻 Top Laptops', headphones:'🎧 Headphones', fashion:'👕 Fashion', home:'🏠 Home', beauty:'💄 Beauty', all:'🔥 Recommended' };
+            document.getElementById('sectionTitle').innerText = titles[cat] || '🔥 Recommended';
+        }
+        
+        function showAllProducts() { filterByCategory('all'); }
+        function showBestSellers() { currentProducts = [...allProducts].sort((a,b) => b.rating - a.rating).slice(0,20); currentPage = 1; renderProducts(); document.getElementById('sectionTitle').innerText = '🏆 Best Sellers'; }
+        function showDeals() { currentProducts = allProducts.filter(p => p.discount && parseInt(p.discount) > 15); currentPage = 1; renderProducts(); document.getElementById('sectionTitle').innerText = '🔥 Today\'s Deals'; }
+        function showNewArrivals() { currentProducts = [...allProducts].slice(0,20); currentPage = 1; renderProducts(); document.getElementById('sectionTitle').innerText = '✨ New Arrivals'; }
+        
+        function sortProducts(s) {
+            let sorted = [...currentProducts];
+            if(s === 'price_low') sorted.sort((a,b) => parseInt(a.price) - parseInt(b.price));
+            else if(s === 'price_high') sorted.sort((a,b) => parseInt(b.price) - parseInt(a.price));
+            else if(s === 'rating') sorted.sort((a,b) => b.rating - a.rating);
+            else if(s === 'discount') sorted.sort((a,b) => (parseInt(b.discount)||0) - (parseInt(a.discount)||0));
+            currentProducts = sorted;
+            currentPage = 1;
+            renderProducts();
+        }
+        
+        function searchProducts() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            if(!q) { alert('Search something!'); return; }
+            currentProducts = allProducts.filter(p => p.name.toLowerCase().includes(q) || p.category.includes(q));
+            currentPage = 1;
+            renderProducts();
+            document.getElementById('sectionTitle').innerHTML = `🔍 "${q}"`;
+        }
+        
+        function searchAndBuy(q) { document.getElementById('searchInput').value = q; searchProducts(); }
+        
+        function showCart() {
+            let clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
+            alert(`Cart: ${clicks.length} items\nWhatsApp for best deals!`);
+        }
+        
+        function subscribeNewsletter(e) {
+            e.preventDefault();
+            let email = document.getElementById('newsletterEmail').value;
+            if(email) {
+                let subs = JSON.parse(localStorage.getItem('subscribers') || '[]');
+                if(!subs.includes(email)) {
+                    subs.push(email);
+                    localStorage.setItem('subscribers', JSON.stringify(subs));
+                    alert('✅ Subscribed!');
+                    document.getElementById('newsletterEmail').value = '';
+                } else alert('Already subscribed!');
+            }
+        }
+        
+        function shareOnWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent('Check ShopDeal India - Best Amazon deals: ' + window.location.href)}`, '_blank'); }
+        function shareOnFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank'); }
+        function startWhatsAppChat() { window.open(`https://wa.me/919773747761?text=${encodeURIComponent('Hi! Need help finding best deals.')}`, '_blank'); }
+        function openSearchModal() { document.getElementById('searchInput').focus(); document.getElementById('search').scrollIntoView({ behavior: 'smooth' }); }
+        function toggleMobileMenu() { document.getElementById('navLinks').classList.toggle('show'); }
+        
+        // Flash sale timer
+        function startFlashSaleTimer() {
+            let end = new Date(); end.setHours(end.getHours() + 24);
+            function update() {
+                let diff = end - new Date();
+                if(diff <= 0) { document.getElementById('flashTimer').innerText = '00:00:00'; return; }
+                let h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+                document.getElementById('flashTimer').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            }
+            update(); setInterval(update, 1000);
+        }
+        
+        // Pan India Dynamic SEO
+        (function() {
+            const cities = ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow'];
+            const randomCity = cities[Math.floor(Math.random() * cities.length)];
+            document.title = `Best Deals in ${randomCity} - Shop on Amazon India`;
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if(metaDesc) metaDesc.setAttribute('content', `Find best products on Amazon in ${randomCity}. Save up to 50% with free shipping. Shop now!`);
+            console.log(`📍 SEO Active - Targeting: ${randomCity}`);
+        })();
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            buildProductsArray();
+            document.getElementById('cartCount').innerText = (JSON.parse(localStorage.getItem('amazon_clicks') || '[]')).length;
+            startFlashSaleTimer();
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.addEventListener('click', () => { q.parentElement.classList.toggle('active'); });
+            });
+            console.log('🚀 ShopDeal India Ready!');
+            console.log(`📱 Meta Pixel ID: ${META_PIXEL_ID}`);
+            console.log(`📘 Facebook Page ID: ${FACEBOOK_PAGE_ID}`);
+            console.log(`🛍️ Amazon Store: ${AMAZON_AFFILIATE_ID}`);
+        });
+        
+        // Make functions global
+        window.goToProduct = goToProduct;
+        window.filterByCategory = filterByCategory;
+        window.showAllProducts = showAllProducts;
+        window.showBestSellers = showBestSellers;
+        window.showDeals = showDeals;
+        window.showNewArrivals = showNewArrivals;
+        window.sortProducts = sortProducts;
+        window.searchProducts = searchProducts;
+        window.searchAndBuy = searchAndBuy;
+        window.loadMoreProducts = loadMoreProducts;
+        window.showCart = showCart;
+        window.subscribeNewsletter = subscribeNewsletter;
+        window.shareOnWhatsApp = shareOnWhatsApp;
+        window.shareOnFacebook = shareOnFacebook;
+        window.startWhatsAppChat = startWhatsAppChat;
+        window.openSearchModal = openSearchModal;
+        window.toggleMobileMenu = toggleMobileMenu;
+    </script>
 </body>
 </html>
