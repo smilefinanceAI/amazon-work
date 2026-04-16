@@ -1,322 +1,249 @@
-// js/amazon-products.js - Verified Working ASINs
-const AMAZON_AFFILIATE_ID = 'smileai24-21';
-const AMAZON_BASE_URL = 'https://www.amazon.in';
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ShopDeal India - Best Products on Amazon | Direct Buy Links</title>
+    <meta name="description" content="Direct links to best products on Amazon India. iPhone, Samsung, OnePlus, Laptops, Headphones, Fashion, Home & more. One click to buy.">
+    <meta name="keywords" content="Amazon products, buy online, best deals, Amazon India, affiliate shopping">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-// ✅ VERIFIED PRODUCTS (सभी India में available)
-const productsDatabase = {
-    // 📱 Mobiles - Verified
-    'iphone-15': { 
-        asin: 'B0CHWNPS5R', 
-        name: 'Apple iPhone 15', 
-        price: '₹71,999', 
-        category: 'mobiles',
-        image: 'https://m.media-amazon.com/images/I/81K9kO9sL9L._SL1500_.jpg',
-        rating: 4.7
-    },
-    'samsung-s23': { 
-        asin: 'B0BQ7PBHPB', 
-        name: 'Samsung Galaxy S23 5G', 
-        price: '₹59,999', 
-        category: 'mobiles',
-        image: 'https://m.media-amazon.com/images/I/61Iym7aPr9L._SL1500_.jpg',
-        rating: 4.6
-    },
-    'oneplus-11r': { 
-        asin: 'B0BZ9WVH3C', 
-        name: 'OnePlus 11R 5G', 
-        price: '₹39,999', 
-        category: 'mobiles',
-        image: 'https://m.media-amazon.com/images/I/61eB7J1lJ4L._SL1500_.jpg',
-        rating: 4.5
-    },
-    'pixel-7a': { 
-        asin: 'B0C1L5H5G9', 
-        name: 'Google Pixel 7a', 
-        price: '₹43,999', 
-        category: 'mobiles',
-        image: 'https://m.media-amazon.com/images/I/61pEu2T7YSL._SL1500_.jpg',
-        rating: 4.4
-    },
-    'iqoo-z7': { 
-        asin: 'B0BZNQVH9G', 
-        name: 'iQOO Z7 5G', 
-        price: '₹18,999', 
-        category: 'mobiles',
-        image: 'https://m.media-amazon.com/images/I/61h4ZwJhZqL._SL1500_.jpg',
-        rating: 4.3
-    },
-    
-    // 💻 Laptops - Verified
-    'macbook-air-m1': { 
-        asin: 'B08N5WRWNW', 
-        name: 'Apple MacBook Air M1', 
-        price: '₹89,990', 
-        category: 'laptops',
-        image: 'https://m.media-amazon.com/images/I/71TPda7cwUL._SL1500_.jpg',
-        rating: 4.8
-    },
-    'hp-pavilion-15': { 
-        asin: 'B0BZ5KX3H8', 
-        name: 'HP Pavilion 15', 
-        price: '₹56,990', 
-        category: 'laptops',
-        image: 'https://m.media-amazon.com/images/I/61xUqZyC-uL._SL1500_.jpg',
-        rating: 4.4
-    },
-    'lenovo-ideapad-3': { 
-        asin: 'B0B7S7H7K9', 
-        name: 'Lenovo IdeaPad 3', 
-        price: '₹42,990', 
-        category: 'laptops',
-        image: 'https://m.media-amazon.com/images/I/61kQxW3q0cL._SL1500_.jpg',
-        rating: 4.3
-    },
-    'asus-vivobook-15': { 
-        asin: 'B0BQY1H1W7', 
-        name: 'ASUS Vivobook 15', 
-        price: '₹37,990', 
-        category: 'laptops',
-        image: 'https://m.media-amazon.com/images/I/61bQ4L9qK1L._SL1500_.jpg',
-        rating: 4.5
-    },
-    'dell-inspiron-15': { 
-        asin: 'B0BQ8V6H6K', 
-        name: 'Dell Inspiron 15', 
-        price: '₹49,990', 
-        category: 'laptops',
-        image: 'https://m.media-amazon.com/images/I/61jQhQ7yJQL._SL1500_.jpg',
-        rating: 4.4
-    },
-    
-    // 🎧 Headphones - Verified
-    'airpods-pro-2': { 
-        asin: 'B0BDJ3Q9R2', 
-        name: 'Apple AirPods Pro 2nd Gen', 
-        price: '₹24,999', 
-        category: 'headphones',
-        image: 'https://m.media-amazon.com/images/I/71xb2xkN5qL._SL1500_.jpg',
-        rating: 4.7
-    },
-    'boat-rockerz-450': { 
-        asin: 'B07HR8N4G7', 
-        name: 'boAt Rockerz 450', 
-        price: '₹1,799', 
-        category: 'headphones',
-        image: 'https://m.media-amazon.com/images/I/71E-vXpWJ3L._SL1500_.jpg',
-        rating: 4.3
-    },
-    'sony-ch510': { 
-        asin: 'B0863QBVTD', 
-        name: 'Sony WH-CH510', 
-        price: '₹3,990', 
-        category: 'headphones',
-        image: 'https://m.media-amazon.com/images/I/61qQ8xWQ6jL._SL1500_.jpg',
-        rating: 4.4
-    },
-    'jbl-tune-510bt': { 
-        asin: 'B08G3Z3L5V', 
-        name: 'JBL Tune 510BT', 
-        price: '₹3,999', 
-        category: 'headphones',
-        image: 'https://m.media-amazon.com/images/I/61W3fqQYk5L._SL1500_.jpg',
-        rating: 4.5
-    },
-    'noise-air-buds': { 
-        asin: 'B09G5X5Q8R', 
-        name: 'Noise Air Buds', 
-        price: '₹1,499', 
-        category: 'headphones',
-        image: 'https://m.media-amazon.com/images/I/61X5X5Q8R._SL1500_.jpg',
-        rating: 4.2
-    },
-    
-    // 👕 Fashion - Verified
-    'nike-runningshoes': { 
-        asin: 'B08H2J3K4L5', 
-        name: 'Nike Running Shoes', 
-        price: '₹3,999', 
-        category: 'fashion',
-        image: 'https://m.media-amazon.com/images/I/71JqQxXqJQL._SL1500_.jpg',
-        rating: 4.5
-    },
-    'allen-solly-shirt': { 
-        asin: 'B08F3G4H5I6', 
-        name: 'Allen Solly Shirt', 
-        price: '₹1,499', 
-        category: 'fashion',
-        image: 'https://m.media-amazon.com/images/I/81HqQxXqJQL._SL1500_.jpg',
-        rating: 4.3
-    },
-    'puma-tshirt-pack': { 
-        asin: 'B08G4H5I6J7', 
-        name: 'Puma T-Shirt Pack of 3', 
-        price: '₹1,299', 
-        category: 'fashion',
-        image: 'https://m.media-amazon.com/images/I/71KqQxXqJQL._SL1500_.jpg',
-        rating: 4.4
-    },
-    'levis-jeans': { 
-        asin: 'B08D1E2F3G4', 
-        name: "Levi's Jeans", 
-        price: '₹2,299', 
-        category: 'fashion',
-        image: 'https://m.media-amazon.com/images/I/81HqQxXqJQL._SL1500_.jpg',
-        rating: 4.5
-    },
-    'fastrack-watch': { 
-        asin: 'B08E2F3G4H5', 
-        name: 'Fastrack Reflex Watch', 
-        price: '₹2,495', 
-        category: 'fashion',
-        image: 'https://m.media-amazon.com/images/I/71WqQxXqJQL._SL1500_.jpg',
-        rating: 4.3
-    },
-    
-    // 🏠 Home & Kitchen - Verified
-    'prestige-cooker': { 
-        asin: 'B08C3D4E5F6', 
-        name: 'Prestige Pressure Cooker', 
-        price: '₹2,299', 
-        category: 'home',
-        image: 'https://m.media-amazon.com/images/I/71KqQxXqJQL._SL1500_.jpg',
-        rating: 4.6
-    },
-    'bajaj-mixer': { 
-        asin: 'B08B2C3D4E5', 
-        name: 'Bajaj Mixer Grinder', 
-        price: '₹3,499', 
-        category: 'home',
-        image: 'https://m.media-amazon.com/images/I/61EqQxXqJQL._SL1500_.jpg',
-        rating: 4.5
-    },
-    'philips-iron': { 
-        asin: 'B08A1B2C3D4', 
-        name: 'Philips Steam Iron', 
-        price: '₹1,499', 
-        category: 'home',
-        image: 'https://m.media-amazon.com/images/I/61HqQxXqJQL._SL1500_.jpg',
-        rating: 4.4
-    },
-    'milton-bottle': { 
-        asin: 'B07Z8Y9X0W1', 
-        name: 'Milton Water Bottle', 
-        price: '₹299', 
-        category: 'home',
-        image: 'https://m.media-amazon.com/images/I/71CqQxXqJQL._SL1500_.jpg',
-        rating: 4.3
-    },
-    
-    // 💄 Beauty - Verified
-    'mamaearth-facewash': { 
-        asin: 'B07X8Y9Z0A1', 
-        name: 'Mamaearth Face Wash', 
-        price: '₹299', 
-        category: 'beauty',
-        image: 'https://m.media-amazon.com/images/I/61FqQxXqJQL._SL1500_.jpg',
-        rating: 4.4
-    },
-    'lakme-cc-cream': { 
-        asin: 'B07W8X9Y0Z1', 
-        name: 'Lakme CC Cream', 
-        price: '₹249', 
-        category: 'beauty',
-        image: 'https://m.media-amazon.com/images/I/71EqQxXqJQL._SL1500_.jpg',
-        rating: 4.3
-    },
-    'maybelline-mascara': { 
-        asin: 'B07V8W9X0Y1', 
-        name: 'Maybelline Mascara', 
-        price: '₹399', 
-        category: 'beauty',
-        image: 'https://m.media-amazon.com/images/I/61DqQxXqJQL._SL1500_.jpg',
-        rating: 4.5
-    }
-};
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">🛍️ ShopDeal India</a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="/">Home</a>
+                <a href="#" onclick="scrollToCategory('mobiles')">📱 Mobiles</a>
+                <a href="#" onclick="scrollToCategory('laptops')">💻 Laptops</a>
+                <a href="#" onclick="scrollToCategory('headphones')">🎧 Headphones</a>
+                <a href="#" onclick="scrollToCategory('fashion')">👕 Fashion</a>
+                <a href="#" onclick="scrollToCategory('home')">🏠 Home</a>
+                <a href="#" onclick="scrollToCategory('beauty')">💄 Beauty</a>
+            </div>
+            <a href="#" class="contact-btn" onclick="scrollToSearch()">🔍 Search</a>
+        </div>
+    </header>
 
-// Function to get Amazon product link
-function getAmazonLink(productKey) {
-    const product = productsDatabase[productKey];
-    if (!product) {
-        console.error('Product not found:', productKey);
-        return '#';
-    }
-    return `${AMAZON_BASE_URL}/dp/${product.asin}?tag=${AMAZON_AFFILIATE_ID}`;
-}
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>⚡ Best Products on <span class="amazon-orange">Amazon India</span></h1>
+        <p>One click to buy - Best prices, genuine products, fast delivery</p>
+        
+        <div class="search-bar" id="search">
+            <input type="text" id="searchInput" placeholder="Search any product: iPhone 15, laptop, shoes...">
+            <button onclick="searchAndGo()">Buy Now →</button>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Products</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Categories</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Support</span>
+            </div>
+        </div>
+    </section>
 
-// Function to redirect to product
-function goToProduct(productKey) {
-    const product = productsDatabase[productKey];
-    if (!product) {
-        alert('Product not found!');
-        return;
-    }
-    
-    const amazonLink = `${AMAZON_BASE_URL}/dp/${product.asin}?tag=${AMAZON_AFFILIATE_ID}`;
-    
-    // Track click
-    trackClick(productKey, product.name, product.price);
-    
-    // Open Amazon product page
-    window.open(amazonLink, '_blank');
-}
+    <!-- Categories Navigation -->
+    <div class="categories-nav">
+        <button class="cat-nav-btn active" onclick="showCategory('all')">All Products</button>
+        <button class="cat-nav-btn" onclick="showCategory('mobiles')">📱 Mobiles</button>
+        <button class="cat-nav-btn" onclick="showCategory('laptops')">💻 Laptops</button>
+        <button class="cat-nav-btn" onclick="showCategory('headphones')">🎧 Headphones</button>
+        <button class="cat-nav-btn" onclick="showCategory('fashion')">👕 Fashion</button>
+        <button class="cat-nav-btn" onclick="showCategory('home')">🏠 Home</button>
+        <button class="cat-nav-btn" onclick="showCategory('beauty')">💄 Beauty</button>
+    </div>
 
-// Track clicks
-function trackClick(productKey, productName, price) {
-    const clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
-    clicks.push({
-        product_key: productKey,
-        product_name: productName,
-        price: price,
-        time: new Date().toISOString()
-    });
-    localStorage.setItem('amazon_clicks', JSON.stringify(clicks.slice(-500)));
-    
-    console.log(`✅ Redirected to Amazon: ${productName}`);
-}
+    <!-- Products Section -->
+    <div class="products-section">
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
 
-// Search and go
-function searchAndGo() {
-    const query = document.getElementById('searchInput')?.value.toLowerCase();
-    if (!query) {
-        alert('Please search for a product!');
-        return;
-    }
-    
-    // Find matching product
-    for (const [key, product] of Object.entries(productsDatabase)) {
-        if (product.name.toLowerCase().includes(query) || 
-            key.toLowerCase().includes(query)) {
-            goToProduct(key);
-            return;
+    <!-- Features -->
+    <div class="features">
+        <div class="feature">
+            <span>✅</span>
+            <h3>Same Price as Amazon</h3>
+            <p>You pay exactly what Amazon charges</p>
+        </div>
+        <div class="feature">
+            <span>🚚</span>
+            <h3>Free Shipping</h3>
+            <p>On lakhs of products with Amazon Prime</p>
+        </div>
+        <div class="feature">
+            <span>🛡️</span>
+            <h3>Genuine Products</h3>
+            <p>100% authentic products from Amazon</p>
+        </div>
+        <div class="feature">
+            <span>💰</span>
+            <h3>Best Prices</h3>
+            <p>Lowest prices guaranteed</p>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">Do I pay extra if I buy through your link? <span>▼</span></div>
+            <div class="faq-answer">No! You pay exactly the same price as buying directly from Amazon. We earn a small commission from Amazon at no extra cost to you.</div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Is it safe to buy through your links? <span>▼</span></div>
+            <div class="faq-answer">Yes! All links go directly to Amazon's official website (amazon.in). Your payment and personal information are handled by Amazon's secure system.</div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">What is the return policy? <span>▼</span></div>
+            <div class="faq-answer">Amazon's return policy applies to all purchases. Most items have 7-30 day return window.</div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">How do I get the best deals? <span>▼</span></div>
+            <div class="faq-answer">Bookmark this site and check daily. We update the best deals from Amazon every day.</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>🛍️ ShopDeal India</h4>
+                <p>Your trusted partner for best products on Amazon India</p>
+                <p>Store ID: <strong>smileai24-21</strong></p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#" onclick="scrollToCategory('mobiles')">Mobiles</a>
+                <a href="#" onclick="scrollToCategory('laptops')">Laptops</a>
+                <a href="#" onclick="scrollToCategory('headphones')">Headphones</a>
+                <a href="#" onclick="scrollToCategory('fashion')">Fashion</a>
+            </div>
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <a href="#" onclick="scrollToCategory('home')">Home & Kitchen</a>
+                <a href="#" onclick="scrollToCategory('beauty')">Beauty</a>
+                <a href="#" onclick="scrollToCategory('toys')">Toys & Games</a>
+                <a href="#" onclick="scrollToCategory('books')">Books</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2024 ShopDeal India | As an Amazon Associate, we earn from qualifying purchases</p>
+        </div>
+    </footer>
+
+    <script src="js/amazon-products.js"></script>
+    <script>
+        // Get all product keys by category
+        const categoryProducts = {
+            'mobiles': ['iphone-15', 'samsung-s23', 'oneplus-11r', 'pixel-7a', 'iqoo-z7'],
+            'laptops': ['macbook-air-m1', 'hp-pavilion-15', 'lenovo-ideapad-3', 'asus-vivobook-15', 'dell-inspiron-15'],
+            'headphones': ['airpods-pro-2', 'boat-rockerz-450', 'sony-ch510', 'jbl-tune-510bt', 'noise-air-buds'],
+            'fashion': ['nike-runningshoes', 'allen-solly-shirt', 'puma-tshirt-pack', 'levis-jeans', 'fastrack-watch'],
+            'home': ['prestige-cooker', 'bajaj-mixer', 'philips-iron', 'milton-bottle'],
+            'beauty': ['mamaearth-facewash', 'lakme-cc-cream', 'maybelline-mascara']
+        };
+        
+        let allProducts = [];
+        
+        // Build all products array
+        for (const [category, keys] of Object.entries(categoryProducts)) {
+            for (const key of keys) {
+                if (productsDatabase[key]) {
+                    allProducts.push({
+                        key: key,
+                        ...productsDatabase[key]
+                    });
+                }
+            }
         }
-    }
-    
-    // If no match, search Amazon directly
-    const searchLink = `${AMAZON_BASE_URL}/s?k=${encodeURIComponent(query)}&tag=${AMAZON_AFFILIATE_ID}`;
-    window.open(searchLink, '_blank');
-}
-
-// Show analytics
-function showAnalytics() {
-    const clicks = JSON.parse(localStorage.getItem('amazon_clicks') || '[]');
-    console.log('=== Amazon Affiliate Analytics ===');
-    console.log(`Total Clicks: ${clicks.length}`);
-    
-    const productStats = {};
-    clicks.forEach(c => {
-        productStats[c.product_name] = (productStats[c.product_name] || 0) + 1;
-    });
-    
-    console.log('\nTop Products:');
-    Object.entries(productStats).sort((a,b) => b[1] - a[1]).slice(0,5).forEach(([name, count]) => {
-        console.log(`  ${name}: ${count} clicks`);
-    });
-    
-    const estimatedEarnings = Math.floor(clicks.length * 0.1) * 150;
-    console.log(`\nEstimated Earnings: ₹${estimatedEarnings.toLocaleString()}`);
-}
-
-// Make global
-window.goToProduct = goToProduct;
-window.searchAndGo = searchAndGo;
-window.showAnalytics = showAnalytics;
+        
+        // Render products grid
+        function renderProducts(products) {
+            const container = document.getElementById('productsGrid');
+            if (!container) return;
+            
+            container.innerHTML = products.map(product => `
+                <div class="product-card" onclick="goToProduct('${product.key}')">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://m.media-amazon.com/images/I/61default.jpg'">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">${product.price}</div>
+                        <div class="product-rating">
+                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))}
+                            <span>${product.rating}</span>
+                        </div>
+                        <button class="buy-btn">Buy on Amazon →</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Show category
+        function showCategory(category) {
+            if (category === 'all') {
+                renderProducts(allProducts);
+            } else {
+                const productKeys = categoryProducts[category] || [];
+                const filteredProducts = productKeys
+                    .map(key => productsDatabase[key])
+                    .filter(p => p)
+                    .map(p => ({ key: Object.keys(productsDatabase).find(k => productsDatabase[k] === p), ...p }));
+                renderProducts(filteredProducts);
+            }
+            
+            // Update active button
+            document.querySelectorAll('.cat-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes(category) || (category === 'all' && btn.textContent === 'All Products')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Scroll functions
+        function scrollToCategory(categoryId) {
+            document.getElementById(categoryId)?.scrollIntoView({ behavior: 'smooth' });
+            showCategory(categoryId);
+        }
+        
+        function scrollToSearch() {
+            document.getElementById('search')?.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function toggleMobileMenu() {
+            document.getElementById('navLinks')?.classList.toggle('show');
+        }
+        
+        // Initialize
+        renderProducts(allProducts);
+        
+        // FAQ toggle
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                q.parentElement.classList.toggle('active');
+            });
+        });
+        
+        console.log('🚀 ShopDeal India Ready!');
+        console.log('📊 Call showAnalytics() to see stats');
+    </script>
+</body>
+</html>
